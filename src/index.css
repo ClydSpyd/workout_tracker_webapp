@@ -1,0 +1,55 @@
+@import 'tailwindcss';
+
+:root {
+  /* --accent-primary: #b3ff00; */
+  /* --accent-secondary: #b3ff00; */
+  /* --accent-secondary: #5eff00; */
+  --accent-primary: #ff8000;
+  --hint-primary-light: #f77c0066;
+  --hint-primary-dark: #f77c0018;
+  --accent-secondary: #ffb700;
+  --dark-one: #18181a;
+  --dark-two: #0f100d;
+  --dark-three: #2f2f2e;
+  --contrast-one: #2a2a2a;
+  --contrast-two: #616161;
+  --contrast-three: #7b7b7b;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Main gradient + color interplay */
+.app-bg {
+  background-color: black;
+  /* background:
+    radial-gradient(
+      circle at 20% 85%,
+      rgba(0, 200, 255, 0.25),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 70%,
+      rgba(140, 0, 255, 0.25),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(0, 100, 255, 0.15),
+      transparent 50%
+    ),
+    linear-gradient(135deg, #040612 0%, #0a0f2a 40%, #0b1035 100%);
+
+  filter: blur(0px); */
+}
+
+/* --accent-primary: #d5ff40;
+  --accent-secondary: #05f3ff;
+  --accent-tertiary: #7b22ff; */
+
+.module-wrapper {
+  @apply rounded-xl border p-4;
+  border-color: var(--contrast-one);
+  background-color: var(--dark-one);
+}
