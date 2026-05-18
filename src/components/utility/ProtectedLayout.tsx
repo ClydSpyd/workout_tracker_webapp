@@ -6,7 +6,7 @@ interface ProtectedLayoutProps {
 
 const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children }) => {
   const handleLogout = () => {
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('access_token');
     window.location.href = '/login';
   };
 

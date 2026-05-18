@@ -11,6 +11,17 @@ function App() {
         path="/"
         element={
           <ProtectedRoute>
+            <h1>
+              Welcome to Workout Tracker! Please select a workout to get
+              started.
+            </h1>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/workout/:id"
+        element={
+          <ProtectedRoute>
             <WorkoutView />
           </ProtectedRoute>
         }

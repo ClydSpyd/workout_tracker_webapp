@@ -22,10 +22,10 @@ declare interface WorkoutSession {
   name: string;
   userId: string;
   exercises: WorkoutExercise[];
-  date: string;
+  started: Date | null;
+  ended: Date | null;
   createdAt: string;
   updatedAt: string;
-  baseWorkout?: string;
   notes: string;
   location?: string;
   baseRoutine?: string;
@@ -62,5 +62,4 @@ declare interface Exercise {
   estimatedCaloriesMET: number;
   aliases: string[];
   tags: string[];
-  [key: string]: any;
 }

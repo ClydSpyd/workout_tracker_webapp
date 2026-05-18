@@ -1,7 +1,7 @@
 export const dummyWorkoutData: WorkoutSession = {
   _id: '6a077c0a52bb6068b31f31fb',
   userId: '69ac23e42e4d14333eb6acb3',
-  name: 'HELLO WORLD',
+  name: 'THURSDAY PUSH DAY',
   notes: '',
   location: '',
   exercises: [
@@ -96,9 +96,25 @@ export const dummyWorkoutData: WorkoutSession = {
       },
     },
   ],
+  started: null,
+  ended: null,
   baseRoutine: '69ad499a36c805c2482ee432',
-  date: '2026-05-15T20:03:23.003Z',
   createdAt: '2026-05-15T20:03:23.009Z',
   updatedAt: '2026-05-15T20:03:23.009Z',
-  __v: 0,
 };
+
+export const workoutSessionSkeleton: WorkoutSession = {
+  _id: 'DEFAULT_WORKOUT',
+  name: '',
+  userId: '',
+  exercises: [],
+  started: null,
+  ended: null,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  notes: '',
+  location: undefined,
+  baseRoutine: undefined,
+};
+
+export default workoutSessionSkeleton;
