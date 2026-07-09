@@ -1,27 +1,17 @@
 import { FaRegCalendar, FaRegClock } from 'react-icons/fa';
 import { useElapsedTime } from '../../../hooks/useElapsedTime';
 import { HiRocketLaunch } from 'react-icons/hi2';
-import { useState } from 'react';
 import { useWorkoutStore } from '../../../stores/workout-store';
 
 export default function WorkoutDetailsBlock() {
-  const { currentWorkout, updateCurrentWorkout } = useWorkoutStore();
+  const { currentWorkout, updateCurrentWorkout, totalSets, completedSets } =
+    useWorkoutStore();
 
   const elapsed = useElapsedTime({
     from: currentWorkout.started,
     until: currentWorkout.ended,
     formatted: true,
   });
-
-  const totalSets = currentWorkout.exercises.reduce(
-    (acc, exercise) => acc + exercise.sets.length,
-    0,
-  );
-  const completedSets = currentWorkout.exercises.reduce(
-    (acc, exercise) =>
-      acc + exercise.sets.filter((set) => set.completed).length,
-    0,
-  );
 
   return (
     <div

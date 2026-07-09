@@ -20,28 +20,30 @@ button {
   cursor: pointer;
 }
 
-/* Main gradient + color interplay */
+/*
+ * App background: a fine grid of small squares in very light grey on black,
+ * with a subtle orange hotspot glowing out from the top-right corner.
+ * Layer order (top to bottom): hotspot glow, vertical grid lines, horizontal
+ * grid lines, black base.
+ */
 .app-bg {
-  background-color: black;
-  /* background:
-    radial-gradient(
-      circle at 20% 85%,
-      rgba(0, 200, 255, 0.25),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 85% 70%,
-      rgba(140, 0, 255, 0.25),
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 50% 20%,
-      rgba(0, 100, 255, 0.15),
-      transparent 50%
-    ),
-    linear-gradient(135deg, #040612 0%, #0a0f2a 40%, #0b1035 100%);
+  --grid-size: 35px;
+  --grid-line: rgba(255, 255, 255, 0.067);
 
-  filter: blur(0px); */
+  background-color: black;
+  background-image:
+    radial-gradient(
+      120% 90% at 100% 0%,
+      rgba(255, 128, 0, 0.156),
+      rgba(255, 128, 0, 0.117) 30%,
+      transparent 60%
+    ),
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    var(--grid-size) var(--grid-size),
+    var(--grid-size) var(--grid-size);
 }
 
 /* --accent-primary: #d5ff40;

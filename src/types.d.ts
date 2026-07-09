@@ -1,65 +1,90 @@
-declare interface WorkoutSetInput {
-  reps: number;
-  weight: number;
-  completed?: boolean; // optional, defaults to false
-}
+export {};
 
-declare interface WorkoutExercise {
-  name: string;
-  sets: WorkoutSetInput[];
-  exerciseDetails: Exercise;
-}
+export const workoutCategories = [
+  'upper-body',
+  'lower-body',
+  'full-body',
+  'push',
+  'pull',
+  'legs',
+  'strength',
+  'hypertrophy',
+  'cardio',
+  'conditioning',
+  'mobility',
+  'core',
+  'calisthenics',
+  'machines',
+  'free-weights',
+  'bodyweight',
+  'sport',
+  'recovery',
+] as const;
 
-declare interface SetPayload {
-  name: string;
-  setData: WorkoutSetInput;
-}
+declare global {
+  type WorkoutCategory = (typeof workoutCategories)[number];
 
-type BaseWorkout = WorkoutExercise[];
+  interface WorkoutSetInput {
+    reps: number;
+    weight: number;
+    completed?: boolean;
+  }
 
-declare interface WorkoutSession {
-  _id: string;
-  name: string;
-  userId: string;
-  exercises: WorkoutExercise[];
-  started: Date | null;
-  ended: Date | null;
-  createdAt: string;
-  updatedAt: string;
-  notes: string;
-  location?: string;
-  baseRoutine?: string;
-}
+  interface WorkoutExercise {
+    name: string;
+    sets: WorkoutSetInput[];
+    exerciseDetails: Exercise;
+  }
 
-declare interface WorkoutSetInput {
-  reps: number;
-  weight: number;
-  completed?: boolean; // optional, defaults to false
-}
+  interface SetPayload {
+    name: string;
+    setData: WorkoutSetInput;
+  }
 
-declare interface Exercise {
-  id: string;
-  name: string;
-  category: string;
-  exerciseType: string;
-  equipment: string[];
-  primaryMuscleGroups: string[];
-  secondaryMuscleGroups: string[];
-  muscleGroups: string[];
-  movementPattern: string;
-  bodyRegion: string;
-  mechanics: string;
-  unilateral: boolean;
-  bilateral: boolean;
-  requiresSpotter: boolean;
-  trackableMetrics: string[];
-  defaultRepRange: {
-    strength?: string;
-    hypertrophy?: string;
-    endurance?: string;
-    [key: string]: string | undefined;
-  };
-  estimatedCaloriesMET: number;
-  aliases: string[];
-  tags: string[];
+  type BaseWorkout = WorkoutExercise[];
+
+  interface WorkoutSession {
+    _id: string;
+    name: string;
+    userId: string;
+    exercises: WorkoutExercise[];
+    started: Date | null;
+    ended: Date | null;
+    createdAt: string;
+    updatedAt: string;
+    notes: string;
+    location?: string;
+    baseRoutine?: string;
+  }
+
+  interface Exercise {
+    id: string;
+    name: string;
+    category: string;
+    exerciseType: string;
+    equipment: string[];
+    primaryMuscleGroups: string[];
+    secondaryMuscleGroups: string[];
+    muscleGroups: string[];
+    movementPattern: string;
+    bodyRegion: string;
+    mechanics: string;
+    unilateral: boolean;
+    bilateral: boolean;
+    requiresSpotter: boolean;
+    trackableMetrics: string[];
+    defaultRepRange: {
+      strength?: string;
+      hypertrophy?: string;
+      endurance?: string;
+      [key: string]: string | undefined;
+    };
+    estimatedCaloriesMET: number;
+    aliases: string[];
+    tags: string[];
+  }
+  interface ApiResponse<T = unknown> {
+    data?: T;
+    error?: string;
+  }
 }

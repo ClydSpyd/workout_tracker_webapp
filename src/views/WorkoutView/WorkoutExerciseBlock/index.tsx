@@ -113,7 +113,8 @@ export default function WorkoutExerciseBlock({
             </div>
           ))}
           <div
-            className="mt-2 h-[45px] w-full rounded-md border border-[var(--accent-secondary)] bg-[var(--accent-secondary)] text-white flex gap-2 items-center justify-center cursor-pointer"
+            className="mt-2 h-[45px] px-10 w-fit rounded-md border border-[var(--accent-secondary)] text-[var(--accent-secondary)] flex gap-2 items-center justify-center cursor-pointer"
+            // className="mt-2 h-[45px] w-full rounded-md border border-[var(--accent-secondary)] bg-[var(--accent-secondary)] text-white flex gap-2 items-center justify-center cursor-pointer"
             onClick={() =>
               setLocalSets([
                 ...localSets,

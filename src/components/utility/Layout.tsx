@@ -10,9 +10,9 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children, header, className }) => {
   return (
     <div
-      className={`min-h-screen flex flex-col irems-center justify-center ${className ?? ''}`}
+      className={`min-h-screen w-full flex flex-col items-center justify-center ${className ?? ''}`}
     >
-      <main className="flex flex-1 flex-col container mx-auto w-[350px] max-h-[750px] overflow-y-auto border bg-[var(--dark-two)]">
+      <main className="flex flex-1 flex-col container mx-auto overflow-y-auto border bg-[var(--dark-two)]">
         {header && <header>{header}</header>}
         <div className="h-full grow p-4 flex flex-col gap-3 app-bg w-full">
           {children}
