@@ -17,3 +17,23 @@ export async function loginUser(
   localStorage.setItem('refresh_token', refreshToken);
   return { accessToken, refreshToken };
 }
+
+// Utility to call the register endpoint and handle tokens
+export async function registerUser(
+  email: string,
+  password: string,
+): Promise<{ accessToken: string; refreshToken: string }> {
+  const response = await fetch('http://localhost:6969/api/user/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!response.ok) throw new Error('Registration failed');
+  const { accessToken, refreshToken } = await response.json();
+  // Save tokens to localStorage
+  localStorage.setItem('access_token', accessToken);
+  localStorage.setItem('refresh_token', refreshToken);
+  return { accessToken, refreshToken };
+}

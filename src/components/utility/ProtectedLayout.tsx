@@ -1,27 +1,19 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import ViewHeader from '../ui/ViewHeader';
 import Sidebar from '../ui/Sidebar';
 
-interface ProtectedLayoutProps {
-  children: React.ReactNode;
-}
-
-const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children }) => {
-  const navigate = useNavigate();
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem('access_token');
-  //   localStorage.removeItem('refresh_token');
-  //   navigate('/login', { replace: true });
-  // };
-
+/**
+ * Layout route for all authenticated pages. The auth guard lives on the route
+ * loader (see router.tsx); this component only renders the shared chrome and
+ * an <Outlet /> for the matched child view.
+ */
+const ProtectedLayout = () => {
   return (
     <div className="app-bg w-screen min-h-screen flex flex-col">
       <ViewHeader />
       <main className="container grow min-w-screen flex h-full overflow-hidden">
         <Sidebar />
-        {children}
+        <Outlet />
       </main>
     </div>
   );
