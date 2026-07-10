@@ -25,10 +25,10 @@ export default function Login() {
 
   return (
     <div className="w-full">
-      <h2 className="mb-1 text-2xl font-bold text-white">Welcome back</h2>
-      <p className="mb-6 text-sm text-[var(--contrast-three)]">
-        Log in to continue your training.
+      <p className="mb-1 text-sm text-[var(--accent-primary)] space-mono">
+        WELCOME BACK
       </p>
+      <h3 className="mb-6 text-5xl heading-three">SIGN IN</h3>
 
       <form className="flex flex-col gap-3" onSubmit={handleLogin}>
         <input

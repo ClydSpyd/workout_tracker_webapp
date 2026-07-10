@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { FiUser, FiLogOut } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import BarsLogo from './BarsLogo';
+import { navItems } from '../../config/nav';
 
 export default function ViewHeader() {
   const navigate = useNavigate();
@@ -39,20 +40,38 @@ export default function ViewHeader() {
   return (
     <div className="bg-transparent text-white px-4 py-3 shadow flex items-center justify-between">
       <div className="w-30">
-        <Link
-          to="/"
-          className="flex gap-0 items-center text-3xl font-extrabold text-[var(--accent-primary)] tracking-tighter"
-        >
+        <Link to="/" className="flex gap-0 items-center">
           <BarsLogo
             size={43}
             barColors={['#E8A33D', '#E8821E', '#D2570D']}
             cornerRadius={5}
           />
-          REPLO
+          <h1 className="text-3xl font-extrabold text-white tracking-normal">
+            REPLO
+          </h1>
         </Link>
       </div>
 
-      <div className="flex-1 h-10 w-full flex justify-center"></div>
+      <nav className="flex-1 flex justify-center">
+        <div className="hidden items-center gap-1 rounded-lg border border-[var(--contrast-one)] bg-[var(--dark-one)] p-1 md:flex">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.path === '/'}
+              className={({ isActive }) =>
+                `rounded-md px-6 py-2 text-sm font-semibold transition-colors ${
+                  isActive
+                    ? 'bg-[var(--accent-primary)] text-black'
+                    : 'text-[var(--contrast-three)] hover:text-white'
+                }`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </div>
+      </nav>
 
       <div className="w-30 flex justify-end">
         <div className="relative" ref={menuRef}>

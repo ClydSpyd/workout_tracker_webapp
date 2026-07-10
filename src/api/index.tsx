@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { workoutMethods } from './workouts';
 
 export const baseClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -16,3 +17,7 @@ baseClient.interceptors.request.use((config) => {
 
   return config;
 });
+
+export const API = {
+  workout: workoutMethods,
+};

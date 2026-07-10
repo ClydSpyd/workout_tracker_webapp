@@ -3,8 +3,16 @@ import ProtectedLayout from './components/utility/ProtectedLayout';
 import AuthLayout from './components/utility/AuthLayout';
 import Login from './views/Login';
 import Signup from './views/Signup';
-import Homescreen from './views/Homescreen';
 import WorkoutView from './views/WorkoutView';
+import { navItems } from './config/nav';
+
+// Derive the protected route children from the shared nav config. The '/' item
+// becomes the index route; the rest use their path (minus the leading slash).
+const navRoutes = navItems.map((item) =>
+  item.path === '/'
+    ? { index: true as const, element: item.element }
+    : { path: item.path.replace(/^\//, ''), element: item.element },
+);
 
 /**
  * Route guard as a loader: runs before the protected layout renders, so an
@@ -35,7 +43,7 @@ export const router = createBrowserRouter([
     element: <ProtectedLayout />,
     loader: requireAuth,
     children: [
-      { index: true, element: <Homescreen /> },
+      ...navRoutes,
       { path: 'workout/:id', element: <WorkoutView /> },
     ],
   },

@@ -17,16 +17,28 @@ const AuthLayout = () => {
             barColors={['#e8a13c', '#e8823c', '#d9662a']}
             cornerRadius={3}
           />
-          <span className="text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-3xl font-extrabold text-white tracking-normal">
             REPLO
-          </span>
+          </h1>
         </div>
 
-        <h1 className="max-w-md text-4xl font-bold leading-tight text-white">
-          Track every rep.
-          <br />
-          <span className="text-[var(--accent-primary)]">Own every session.</span>
-        </h1>
+        <div className="flex flex-col gap-3">
+          <div className="flex gap-6 items-center">
+            <p className="text-[var(--accent-primary)] space-mono">TRAIN</p>
+            <p className="text-[var(--accent-primary)]">•</p>
+            <p className="text-[var(--accent-primary)] space-mono">TRACK</p>
+            <p className="text-[var(--accent-primary)]">•</p>
+            <p className="text-[var(--accent-primary)] space-mono">REPEAT</p>
+          </div>
+          <h1 className="heading-one">
+            EVERY REP,
+            <br /> ON THE RECORD
+          </h1>
+          <p className="max-w-md body-text">
+            Log sessions, chase PRs, and build routines that actually stick.
+            Your training history, all in one place.
+          </p>
+        </div>
 
         <p className="text-sm text-[var(--contrast-three)]">
           © {new Date().getFullYear()} REPLO. All rights reserved.
