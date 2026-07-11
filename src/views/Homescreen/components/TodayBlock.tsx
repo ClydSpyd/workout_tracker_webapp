@@ -1,27 +1,23 @@
-import { use } from 'react';
-import { API } from '../../../api';
 import Button from '../../../components/ui/Button';
 import { FaPlay, FaPlus } from 'react-icons/fa';
 import { useWorkoutSessionData } from '../../../hooks/useWorkoutSessionData';
-
-let activeWorkoutPromise: Promise<WorkoutSession | null> | null = null;
-
-const getActiveWorkoutPromise = () => {
-  if (!activeWorkoutPromise) {
-    activeWorkoutPromise = API.workout.getMyActiveWorkout();
-  }
-
-  return activeWorkoutPromise;
-};
+import { useMyCurrentWorkout } from '../../../queries/workouts';
+import { useNavigate } from 'react-router-dom';
 
 export default function TodayBlock() {
-  const activeWorkout = use(getActiveWorkoutPromise());
+  const navigate = useNavigate();
+
+  const { data: activeWorkout } = useMyCurrentWorkout();
   const { setCount, exerciseCount, estimatedDurationSec } =
-    useWorkoutSessionData(activeWorkout);
+    useWorkoutSessionData(activeWorkout ?? null);
+
+  const handleStartWorkout = () => {
+    navigate('/current-workout' + (!activeWorkout ? `?create=true` : ''));
+  };
 
   return (
     <section
-      className={`flex flex-col md:flex-row gap-4  items-center justify-between text-white  module-wrapper ${activeWorkout ? 'border-[var(--accent-primary)]! bg-grad' : ''}`}
+      className={`h-[185px] flex flex-col md:flex-row gap-4 items-center justify-between text-white  module-wrapper ${activeWorkout ? 'border-[var(--accent-primary)]! bg-grad' : ''}`}
     >
       <div className="flex flex-col gap-2 opacity-80">
         <div className="text-xs flex gap-2 items-center">
@@ -56,7 +52,7 @@ export default function TodayBlock() {
       <Button
         icon={activeWorkout ? <FaPlay /> : <FaPlus />}
         text={activeWorkout ? 'Start Workout' : 'Start a Session'}
-        onClick={() => console.log('Start a session clicked')}
+        onClick={handleStartWorkout}
         size="xl"
         additionalClasses={'w-full md:w-auto mt-4 md:mt-0'}
       />

@@ -9,6 +9,7 @@ interface ButtonProps {
   icon?: ReactNode;
   size?: ButtonSize;
   additionalClasses?: string;
+  disabled?: boolean;
 }
 
 // Per-size padding, text and gap. Icon scales with the font via `em` sizing.
@@ -25,12 +26,14 @@ export default function Button({
   icon,
   size = 'm',
   additionalClasses,
+  disabled = false,
 }: ButtonProps) {
   return (
     <button
+      disabled={disabled}
       type="button"
       onClick={onClick}
-      className={`anton inline-flex items-center justify-center rounded-lg bg-[var(--accent-primary)] font-extrabold uppercase tracking-wide text-black transition-colors hover:brightness-95 ${SIZE_STYLES[size]} ${additionalClasses ?? ''}`}
+      className={`anton inline-flex items-center justify-center rounded-lg  font-extrabold uppercase tracking-wide transition-colors ${SIZE_STYLES[size]} ${disabled ? 'bg-[var(--contrast-one)] text-[var(--contrast-two)] cursor-not-allowed!' : 'bg-[var(--accent-primary)] text-black hover:brightness-95'} ${additionalClasses ?? ''}`}
     >
       {icon && <span className="flex items-center text-[1.1em]">{icon}</span>}
       {text}

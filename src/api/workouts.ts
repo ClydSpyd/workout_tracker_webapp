@@ -4,9 +4,12 @@ import { baseClient } from '.';
 export const workoutMethods = {
   getMyActiveWorkout: async () => {
     try {
-      const res: AxiosResponse<WorkoutSession> =
+      const res: AxiosResponse<WorkoutSession | null> =
         await baseClient.get('/workout/active');
       console.log('Fetched active workout:', res.data);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       return res.data;
     } catch (error) {
       console.log('Error in getMyActiveWorkout method:', error);

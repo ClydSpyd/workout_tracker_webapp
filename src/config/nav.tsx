@@ -4,6 +4,7 @@ import { HiBolt } from 'react-icons/hi2';
 import { IoCalendarClearOutline, IoListSharp } from 'react-icons/io5';
 import Homescreen from '../views/Homescreen';
 import PlaceholderView from '../views/PlaceholderView';
+import WorkoutView from '../views/WorkoutView';
 
 export interface NavItem {
   /** Absolute path; also the router path for this destination. */
@@ -32,7 +33,7 @@ export const navItems: NavItem[] = [
     path: '/current-workout',
     label: 'Current Workout',
     icon: <HiBolt fontSize={18} />,
-    element: <PlaceholderView title="Current Workout" />,
+    element: <WorkoutView />,
   },
   {
     path: '/sessions',
