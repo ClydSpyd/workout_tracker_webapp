@@ -7,13 +7,15 @@ import { useNavigate } from 'react-router-dom';
 export default function TodayBlock() {
   const navigate = useNavigate();
 
-  const { data: activeWorkout } = useMyCurrentWorkout();
+  const { data: activeWorkout, error } = useMyCurrentWorkout();
   const { setCount, exerciseCount, estimatedDurationSec } =
     useWorkoutSessionData(activeWorkout ?? null);
 
   const handleStartWorkout = () => {
     navigate('/current-workout' + (!activeWorkout ? `?create=true` : ''));
   };
+
+  console.log('TodayBlock - error:', error);
 
   return (
     <section
@@ -28,7 +30,11 @@ export default function TodayBlock() {
         <h3 className="heading-three text-white uppercase my-2">
           {activeWorkout ? activeWorkout.name : 'REST DAY - NOTHING SCHEDULED'}
         </h3>
-        {activeWorkout ? (
+        {error ? (
+          <p className="body-text text-sm!">
+            Error loading workout: {error.message}
+          </p>
+        ) : activeWorkout ? (
           <div className="flex gap-2">
             <p className="body-text text-xs! border border-[var(--contrast-one)] text-[var(--contrast-two)] bg-[var(--dark-two)] rounded-md px-2 py-2">
               {exerciseCount} exercises

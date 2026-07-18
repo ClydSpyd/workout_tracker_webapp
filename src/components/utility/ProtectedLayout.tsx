@@ -11,7 +11,7 @@ const ProtectedLayout = () => {
   return (
     <div className="app-bg w-screen min-h-screen flex flex-col">
       <ViewHeader />
-      <main className="container grow min-w-screen flex h-full overflow-hidden">
+      <main className="container grow min-w-screen flex flex-1 overflow-hidden">
         <Sidebar />
         <Outlet />
       </main>

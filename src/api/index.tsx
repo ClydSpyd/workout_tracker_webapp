@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios, { type AxiosError } from 'axios';
 import { workoutMethods } from './workouts';
+import exerciseMethods from './exercises';
 
 export const baseClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -18,6 +19,20 @@ baseClient.interceptors.request.use((config) => {
   return config;
 });
 
+baseClient.interceptors.response.use(
+  (response) => response, // success: pass through untouched
+  (error: AxiosError<{ error: string }>) => {
+    const message = error.response?.data?.error ?? error.message;
+    console.error('API error:', {
+      url: error.config?.url,
+      status: error.response?.status,
+      message,
+    });
+    return Promise.reject(new Error(message)); // hand callers a clean Error
+  },
+);
+
 export const API = {
   workout: workoutMethods,
+  exercise: exerciseMethods,
 };

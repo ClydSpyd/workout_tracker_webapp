@@ -33,6 +33,8 @@ export const muscleGroups = [
   'upper-traps',
 ];
 
+export type MuscleGroup = (typeof muscleGroups)[number];
+
 // Consolidated, general-use muscle groups (sub-groups like front/side/rear-delts,
 // upper/lower-chest, and back sub-regions rolled up into their parent group)
 export const primaryMuscleGroups = [
@@ -42,13 +44,17 @@ export const primaryMuscleGroups = [
   'biceps',
   'triceps',
   'forearms',
-  'abs',
   'glutes',
   'quadriceps',
   'hamstrings',
   'calves',
   'full-body',
+  'upper-body',
+  'lower-body',
+  'core',
 ];
+
+export type PrimaryMuscleGroup = (typeof primaryMuscleGroups)[number];
 
 // General tags for labeling a workout (e.g. by split or body region)
 export const tags = [
@@ -111,6 +117,9 @@ export const equipment = [
   'trap-bar',
   'wall',
 ];
+
+export type Equipment = (typeof equipment)[number];
+
 export const movementPattern = [
   'anti-extension',
   'anti-lateral-flexion',

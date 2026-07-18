@@ -1,6 +1,4 @@
-export {};
-
-export const workoutCategories = [
+const workoutCategories = [
   'upper-body',
   'lower-body',
   'full-body',
@@ -21,70 +19,79 @@ export const workoutCategories = [
   'recovery',
 ] as const;
 
-declare global {
-  type WorkoutCategory = (typeof workoutCategories)[number];
+type WorkoutCategory = (typeof workoutCategories)[number];
 
-  interface WorkoutSetInput {
-    reps: number;
-    weight: number;
-    completed?: boolean;
-  }
+declare interface WorkoutSetInput {
+  reps: number;
+  weight: number;
+  completed?: boolean;
+}
 
-  interface WorkoutExercise {
-    name: string;
-    sets: WorkoutSetInput[];
-    exerciseDetails: Exercise;
-  }
+declare interface WorkoutExercise {
+  exerciseId?: string; // slug FK into the exercise catalog; always set by the API
+  name: string;
+  sets: WorkoutSetInput[];
+  exerciseDetails?: Exercise; // muscle groups etc.; absent if the id can't be resolved
+}
 
-  interface SetPayload {
-    name: string;
-    setData: WorkoutSetInput;
-  }
+declare interface SetPayload {
+  name: string;
+  setData: WorkoutSetInput;
+}
 
-  type BaseWorkout = WorkoutExercise[];
+declare type BaseWorkout = WorkoutExercise[];
 
-  interface WorkoutSession {
-    _id: string;
-    name: string;
-    userId: string;
-    exercises: WorkoutExercise[];
-    started: Date | null;
-    ended: Date | null;
-    createdAt: string;
-    updatedAt: string;
-    notes: string;
-    location?: string;
-    baseRoutine?: string;
-  }
+declare interface WorkoutSession {
+  _id: string;
+  name: string;
+  userId: string;
+  exercises: WorkoutExercise[];
+  started: Date | null;
+  ended: Date | null;
+  createdAt: string;
+  updatedAt: string;
+  notes: string;
+  tags: string[];
+  location?: string;
+  baseRoutine?: string;
+}
 
-  interface Exercise {
-    id: string;
-    name: string;
-    category: string;
-    exerciseType: string;
-    equipment: string[];
-    primaryMuscleGroups: string[];
-    secondaryMuscleGroups: string[];
-    muscleGroups: string[];
-    movementPattern: string;
-    bodyRegion: string;
-    mechanics: string;
-    unilateral: boolean;
-    bilateral: boolean;
-    requiresSpotter: boolean;
-    trackableMetrics: string[];
-    defaultRepRange: {
-      strength?: string;
-      hypertrophy?: string;
-      endurance?: string;
-      [key: string]: string | undefined;
-    };
-    estimatedCaloriesMET: number;
-    aliases: string[];
-    tags: string[];
-  }
-  interface ApiResponse<T = unknown> {
-    data?: T;
-    error?: string;
-  }
+declare interface Exercise {
+  id: string;
+  name: string;
+  category: string;
+  exerciseType: string;
+  equipment: string[];
+  primaryMuscleGroups: string[];
+  secondaryMuscleGroups: string[];
+  muscleGroups: string[];
+  movementPattern: string;
+  bodyRegion: string;
+  mechanics: string;
+  unilateral: boolean;
+  bilateral: boolean;
+  requiresSpotter: boolean;
+  trackableMetrics: string[];
+  defaultRepRange: {
+    strength?: string;
+    hypertrophy?: string;
+    endurance?: string;
+    [key: string]: string | undefined;
+  };
+  estimatedCaloriesMET: number;
+  aliases: string[];
+  tags: string[];
+}
+
+declare interface ExerciseMinimal {
+  id: string;
+  name: string;
+  equipment: string[];
+  muscleGroups: string[];
+  bodyRegion: string;
+}
+
+declare interface ApiResponse<T = unknown> {
+  data?: T;
+  error?: string;
 }

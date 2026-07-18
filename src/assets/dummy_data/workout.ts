@@ -4,6 +4,7 @@ export const dummyWorkoutData: WorkoutSession = {
   name: 'THURSDAY PUSH DAY',
   notes: '',
   location: '',
+  tags: ['push', 'upper-body', 'strength'],
   exercises: [
     {
       name: 'Hammer Curl',

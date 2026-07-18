@@ -3,15 +3,34 @@ import { FaPlay, FaPlus } from 'react-icons/fa';
 import { primaryMuscleGroups } from '../../../config/muscles';
 import Button from '../../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
+import { API } from '../../../api';
+import { useMyCurrentWorkout } from '../../../queries/workouts';
 
-export default function NewWorkoutModal() {
+export default function CreateWorkout() {
   const [workoutName, setWorkoutName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedMuscles, setSelectedMuscles] = useState<string[]>([]);
   const navigate = useNavigate();
+  const { refetch } = useMyCurrentWorkout();
 
   const handleLoadRoutine = () => {
     navigate('/current-workout?loadRoutine=true');
+  };
+
+  const hanleCreateWorkout = async () => {
+    setIsSubmitting(true);
+    try {
+      await API.workout.createWorkout({
+        name: workoutName,
+        tags: selectedMuscles,
+      });
+      await refetch(); // Refetch the current workout after creating a new one
+      navigate('/current-workout');
+    } catch (error) {
+      console.error('Error creating workout:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -74,9 +93,7 @@ export default function NewWorkoutModal() {
           text="Create Workout"
           size="xl"
           additionalClasses="w-full"
-          onClick={() => {
-            setIsSubmitting(true);
-          }}
+          onClick={hanleCreateWorkout}
           disabled={isSubmitting || !workoutName}
           icon={<FaPlay className="text-xl" />}
         />

@@ -1,27 +1,98 @@
-import type { AxiosError, AxiosResponse } from 'axios';
 import { baseClient } from '.';
 
 export const workoutMethods = {
   getMyActiveWorkout: async () => {
-    try {
-      const res: AxiosResponse<WorkoutSession | null> =
-        await baseClient.get('/workout/active');
-      console.log('Fetched active workout:', res.data);
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      return res.data;
-    } catch (error) {
-      console.log('Error in getMyActiveWorkout method:', error);
-      const axiosError = error as AxiosError<{ error: string }>;
-
-      console.error('Error fetching active workout:', {
-        status: axiosError.response?.status,
-        message: axiosError.response?.data?.error || axiosError.message,
-        error,
-      });
-
-      throw new Error(axiosError.response?.data?.error || axiosError.message);
-    }
+    const { data } = await baseClient.get<WorkoutSession | null>(
+      '/workout/active',
+    );
+    return data;
+  },
+  createWorkout: async (workoutData: Partial<WorkoutSession>) => {
+    const { data } = await baseClient.post<WorkoutSession>(
+      '/workout',
+      workoutData,
+    );
+    return data;
+  },
+  updateWorkout: async (
+    workoutId: string,
+    updatedData: Partial<WorkoutSession>,
+  ) => {
+    const { data } = await baseClient.patch<WorkoutSession>(
+      `/workout/${workoutId}`,
+      updatedData,
+    );
+    return data;
+  },
+  deleteWorkout: async (workoutId: string) => {
+    const { data } = await baseClient.delete<{ message: string }>(
+      `/workout/${workoutId}`,
+    );
+    return data;
+  },
+  addExerciseToWorkout: async (exerciseId: string, workoutId: string) => {
+    const { data } = await baseClient.post<WorkoutSession>(
+      `/workout/${workoutId}/exercise`,
+      {
+        exerciseId,
+        sets: [],
+      },
+    );
+    return data;
+  },
+  removeExerciseFromWorkout: async (exerciseId: string, workoutId: string) => {
+    const { data } = await baseClient.delete<WorkoutSession>(
+      `/workout/${workoutId}/exercise`,
+      {
+        data: {
+          exerciseId,
+        },
+      },
+    );
+    return data;
+  },
+  addSetToExercise: async (
+    workoutId: string,
+    exerciseId: string,
+    setData: WorkoutSetInput,
+  ) => {
+    const { data } = await baseClient.post<WorkoutSession>(
+      `/workout/${workoutId}/set`,
+      {
+        exerciseId,
+        setData,
+      },
+    );
+    return data;
+  },
+  deleteSetFromExercise: async (
+    workoutId: string,
+    exerciseId: string,
+    setIndex: number,
+  ) => {
+    const { data } = await baseClient.delete<WorkoutSession>(
+      `/workout/${workoutId}/set/${setIndex}`,
+      {
+        data: {
+          exerciseId,
+        },
+      },
+    );
+    return data;
+  },
+  updateSetInExercise: async (
+    workoutId: string,
+    exerciseId: string,
+    setData: Partial<WorkoutSetInput>,
+    setIndex: number,
+  ) => {
+    const { data } = await baseClient.patch<WorkoutSession>(
+      `/workout/${workoutId}/set/${setIndex}`,
+      {
+        exerciseId,
+        setData,
+      },
+    );
+    return data;
   },
 };
