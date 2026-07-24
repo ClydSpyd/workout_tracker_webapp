@@ -38,7 +38,7 @@ export default function WorkoutTitleBlock() {
             {workout.name}
           </h1>
           <HiMiniPencilSquare
-            className="ml-2 text-[var(--contrast-two)] text-3xl p-1 cursor-pointer border transition-all duration-300 border-transparent hover:border-[var(--contrast-two)] rounded-md"
+            className="ml-2 text-[var(--contrast-two)] text-3xl p-1 cursor-pointer border transition-all duration-300 border-transparent hover:border-[var(--contrast-two)] rounded-md hidden lg:inline-block"
             onClick={() => setEditing(true)}
           />
         </div>

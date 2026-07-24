@@ -10,7 +10,7 @@ const AuthLayout = () => {
   return (
     <div className="app-bg flex min-h-screen w-screen">
       {/* Left: common across every auth route */}
-      <section className="hidden flex-1 flex-col justify-between p-12 md:flex">
+      <section className="hidden flex-1 flex-col justify-between p-12 lg:flex">
         <div className="flex items-center gap-3">
           <BarsLogo
             size={36}
@@ -46,7 +46,7 @@ const AuthLayout = () => {
       </section>
 
       {/* Right: fixed-width, route-specific */}
-      <section className="flex w-full shrink-0 flex-col justify-center border-l border-[var(--contrast-one)] bg-[var(--dark-two)] p-10 md:w-[440px]">
+      <section className="flex w-full shrink-0 flex-col justify-center border-l border-[var(--contrast-one)] bg-[var(--dark-two)] p-10 lg:w-[440px]">
         <Outlet />
       </section>
     </div>

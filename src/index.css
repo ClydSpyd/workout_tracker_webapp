@@ -81,21 +81,37 @@ h6 {
 .heading-one {
   font-size: 96px;
   line-height: 1.1;
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+  }
 }
 
 .heading-two {
   font-size: 72px;
   line-height: 1.1;
+
+  @media (max-width: 768px) {
+    font-size: 32px;
+  }
 }
 
 .heading-three {
   font-size: 48px;
   line-height: 1.1;
+
+  @media (max-width: 768px) {
+    font-size: 26px;
+  }
 }
 
 .heading-four {
   font-size: 26px;
   line-height: 1.1;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 }
 
 p {

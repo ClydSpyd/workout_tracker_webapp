@@ -16,6 +16,7 @@ import {
   useDeleteSetFromExercise,
   useRemoveExerciseFromWorkout,
 } from '../../../mutations/workouts';
+import SwitchExerciseModal from './SwitchExerciseModal';
 
 interface ExerciseCardProps {
   exercise: WorkoutExercise;
@@ -44,6 +45,7 @@ export default function ExerciseCard({
 }: ExerciseCardProps) {
   const [openSetIndex, setOpenSetIndex] = useState<number | null>(0);
   const [confirmingRemove, setConfirmingRemove] = useState(false);
+  const [switching, setSwitching] = useState(false);
   const sets = exercise.sets.map((s) => ({
     reps: s.reps,
     weight: s.weight,
@@ -116,28 +118,28 @@ export default function ExerciseCard({
         tabIndex={0}
         onClick={onOpen}
         onKeyDown={(e) => e.key === 'Enter' && onOpen()}
-        className="cursor-pointer rounded-2xl border border-[var(--contrast-one)] bg-[var(--dark-one)] px-8 py-6 transition-colors hover:border-[var(--contrast-two)]"
+        className="cursor-pointer rounded-2xl border border-[var(--contrast-one)] bg-[var(--dark-one)] p-4 lg:px-8 lg:py-6 transition-colors hover:border-[var(--contrast-two)]"
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-4">
-            <span className="anton text-4xl text-[var(--contrast-two)]">
+            <span className="anton text-xl lg:text-4xl text-[var(--contrast-two)]">
               {number}
             </span>
             <div className="min-w-0">
               <h3 className="heading-four truncate text-white">
                 {exercise.name}
               </h3>
-              <p className="mt-1 text-sm text-[var(--contrast-three)]">
+              <p className="mt-1 text-[10px] lg:text-sm text-[var(--contrast-three)]">
                 {muscles.map(formatLabel).join(' · ')}
               </p>
             </div>
           </div>
 
           <div className="flex shrink-0 items-center gap-4">
-            <span className="space-mono text-xs uppercase tracking-wide text-[var(--contrast-three)]">
+            <span className="space-mono text-xs uppercase tracking-wide text-[var(--contrast-three)] hidden lg:inline-block">
               {loggedCount}/{sets.length} Logged
             </span>
-            <span className="space-mono rounded-full border border-[var(--accent-primary)] bg-[var(--hint-primary-dark)] px-4 py-1 text-xs font-bold uppercase tracking-wide text-[var(--accent-primary)]">
+            <span className="space-mono rounded-full border border-[var(--accent-primary)] bg-[var(--hint-primary-dark)] px-4 py-1 text-[10px] lg:text-xs font-bold uppercase tracking-wide text-[var(--accent-primary)]">
               Open
             </span>
           </div>
@@ -148,9 +150,9 @@ export default function ExerciseCard({
           {sets.map((set, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 rounded-lg border border-[var(--contrast-one)] px-4 py-2.5"
+              className="flex items-center gap-2 rounded-lg border border-[var(--contrast-one)] px-2 lg:px-4 py-2.5"
             >
-              <span className="space-mono text-sm text-[var(--contrast-two)]!">
+              <span className="space-mono text-xs lg:text-sm text-[var(--contrast-two)]!">
                 {set.reps} × {set.weight}
               </span>
               {set.completed ? (
@@ -167,12 +169,19 @@ export default function ExerciseCard({
 
   // ---- Expanded state ------------------------------------------------------
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-[var(--accent-primary)] bg-[var(--dark-one)] px-8 py-6">
+    <section className="relative overflow-hidden rounded-2xl border border-[var(--accent-primary)] bg-[var(--dark-one)] px-4 py-6 lg:px-8 lg:py-6">
       {confirmingRemove && (
         <RemoveConfirmOverlay
           exerciseName={exercise.name}
           onConfirm={confirmRemove}
           onCancel={() => setConfirmingRemove(false)}
+        />
+      )}
+
+      {switching && (
+        <SwitchExerciseModal
+          currentExercise={exercise}
+          onClose={() => setSwitching(false)}
         />
       )}
 
@@ -187,21 +196,38 @@ export default function ExerciseCard({
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-3">
             <h3 className="heading-three text-white">{exercise.name}</h3>
-            <HeaderButton icon={<FiRepeat />} label="Switch" />
+            <HeaderButton
+              icon={<FiRepeat />}
+              label="Switch"
+              onClick={() => setSwitching(true)}
+            />
             <HeaderButton
               icon={<FiTrash2 />}
               label="Remove"
               onClick={() => setConfirmingRemove(true)}
             />
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {muscles.map((muscle) => (
-              <span
-                key={muscle}
-                className="space-mono rounded-full border border-[var(--contrast-one)] px-3 py-1 text-xs uppercase tracking-wide text-[var(--contrast-three)]!"
-              >
-                {formatLabel(muscle)}
-              </span>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {muscles.map((muscle, i) => (
+              <>
+                <span
+                  key={muscle}
+                  className="space-mono rounded-full lg:border border-[var(--contrast-one)] lg:px-3 lg:py-1 text-[10px] lg:text-xs uppercase tracking-wide text-[var(--contrast-three)]!"
+                >
+                  {formatLabel(muscle)}
+                </span>
+                {i < muscles.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="text-[var(--contrast-three)] lg:hidden"
+                    style={{
+                      lineHeight: 1,
+                    }}
+                  >
+                    •
+                  </span>
+                )}
+              </>
             ))}
           </div>
         </div>
@@ -214,7 +240,7 @@ export default function ExerciseCard({
           <span className="anton text-4xl text-[var(--contrast-two)]">
             {number}
           </span>
-          <span className="space-mono text-xs uppercase tracking-wide text-[var(--contrast-three)]">
+          <span className="space-mono text-xs uppercase tracking-wide text-[var(--contrast-three)] hidden lg:inline-block">
             {loggedCount}/{sets.length} Logged
           </span>
         </button>
@@ -289,7 +315,7 @@ function HeaderButton({
     <button
       type="button"
       onClick={onClick}
-      className="space-mono flex items-center gap-2 rounded-full border border-[var(--contrast-one)] px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--accent-primary)] transition-colors hover:border-[var(--accent-primary)]"
+      className="space-mono hidden lg:flex items-center gap-2 rounded-full border border-[var(--contrast-one)] px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--accent-primary)] transition-colors hover:border-[var(--accent-primary)]"
     >
       {icon}
       {label}
@@ -374,14 +400,14 @@ function SetEditor({
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+      <div className="mt-6 flex flex-col lg:grid grid-cols-[1fr_auto_1fr] items-center gap-4">
         <Stepper
           label="Reps"
           value={set.reps}
           onDecrement={() => onAdjust('reps', -1)}
           onIncrement={() => onAdjust('reps', 1)}
         />
-        <div className="h-16 w-px bg-[var(--contrast-one)]" />
+        <div className="h-16 w-px bg-[var(--contrast-one)] hidden lg:inline-block" />
         <Stepper
           label="Weight · kg"
           value={set.weight}
@@ -413,13 +439,13 @@ function Stepper({
   onIncrement: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full lg:w-fit lg:mx-auto">
       <span className="space-mono text-xs uppercase tracking-wide text-[var(--contrast-three)]!">
         {label}
       </span>
-      <div className="mt-2 flex items-center gap-4">
+      <div className="mt-2 flex items-center gap-4 w-full">
         <StepperButton icon={<FiMinus />} onClick={onDecrement} />
-        <span className="anton min-w-[2ch] text-center text-6xl text-white">
+        <span className="anton min-w-[2ch] grow text-center text-4xl lg:text-6xl text-white">
           {value}
         </span>
         <StepperButton icon={<FiPlus />} onClick={onIncrement} />
@@ -467,13 +493,13 @@ function SetSummaryRow({
       onKeyDown={(e) => e.key === 'Enter' && onOpen()}
       className="flex cursor-pointer items-center justify-between rounded-xl border border-[var(--contrast-one)] px-6 py-4 transition-colors hover:border-[var(--contrast-two)]"
     >
-      <div className="flex items-baseline gap-3">
+      <div className="flex items-center gap-3">
         <span className="space-mono text-xs uppercase tracking-wide text-[var(--contrast-three)]!">
           Set {setNumber}
         </span>
         <span className="anton text-lg text-[var(--contrast-two)]!">
           {set.reps}
-          <span className="space-mono ml-1 text-xs text-[var(--contrast-two)]!">
+          <span className="space-mono ml-1 text-xs text-[var(--contrast-two)]! hidden lg:">
             reps
           </span>
           <span className="mx-1">×</span>
@@ -485,7 +511,7 @@ function SetSummaryRow({
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="space-mono text-xs uppercase tracking-wide text-[var(--contrast-three)]!">
+        <span className="space-mono text-xs uppercase tracking-wide text-[var(--contrast-three)]! hidden lg:inline-block">
           Tap to log
         </span>
         <button

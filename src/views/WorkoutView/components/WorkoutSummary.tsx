@@ -2,10 +2,16 @@ import { FaRegCalendar, FaRegClock, FaStop } from 'react-icons/fa';
 import { format } from 'date-fns';
 import WorkoutTitleBlock from './WorkoutTitleBlock';
 import Button from '../../../components/ui/Button';
+import { useWorkoutSessionData } from '../../../hooks/useWorkoutSessionData';
 
-export default function WorkoutSummary() {
+export default function WorkoutSummary({
+  session,
+}: {
+  session?: WorkoutSession | null;
+}) {
+  const { exerciseCount, setCount } = useWorkoutSessionData(session ?? null);
   return (
-    <div className="w-full flex  justify-between gap-4 h-full min-h-0 mb-4">
+    <div className="w-full flex flex-col lg:flex-row justify-between gap-4 h-full min-h-0 mb-4">
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <span
@@ -15,7 +21,7 @@ export default function WorkoutSummary() {
           <p className="anotation">Live session</p>
         </div>
         <WorkoutTitleBlock />
-        <div className="flex gap-2">
+        <div className="hidden lg:flex gap-2">
           <div className="flex items-center px-4 py-2 rounded-md bg-[var(--dark-one)] text-[var(--contrast-three)] border border-[var(--contrast-one)]">
             <FaRegClock className="text-sm relative bottom-[1px] mr-2" />
             <p className="text-xs! font-[700] text-[var(--contrast-three)]!">
@@ -30,18 +36,18 @@ export default function WorkoutSummary() {
           </div>
           <div className="flex items-center px-4 py-2 rounded-md bg-[var(--dark-one)] text-[var(--contrast-three)] border border-[var(--contrast-one)]">
             <p className="text-xs! font-[700] text-[var(--contrast-three)]!">
-              0 exercises
+              {exerciseCount} exercises
             </p>
             <p className="text-xs! font-[700] text-[var(--contrast-three)]! px-2">
               •
             </p>
             <p className="text-xs! font-[700] text-[var(--contrast-three)]!">
-              0 sets
+              {setCount} sets
             </p>
           </div>
         </div>
       </div>
-      <div className="h-full justify-center flex flex-col items-end w-40">
+      <div className="h-full justify-center hidden lg:flex flex-col items-end w-40">
         <p className="text-[var(--contrast-three)]! text-xs! font-[700] pr-1">
           ELAPSED
         </p>

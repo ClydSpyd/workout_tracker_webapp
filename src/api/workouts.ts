@@ -51,6 +51,20 @@ export const workoutMethods = {
     );
     return data;
   },
+  replaceExercise: async (
+    workoutId: string,
+    fromExerciseId: string,
+    toExerciseId: string,
+  ) => {
+    const { data } = await baseClient.patch<WorkoutSession>(
+      `/workout/${workoutId}/exercise/replace`,
+      {
+        fromExerciseId,
+        toExerciseId,
+      },
+    );
+    return data;
+  },
   addSetToExercise: async (
     workoutId: string,
     exerciseId: string,

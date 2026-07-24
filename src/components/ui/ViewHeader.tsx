@@ -53,7 +53,7 @@ export default function ViewHeader() {
       </div>
 
       <nav className="flex-1 flex justify-center">
-        <div className="hidden items-center gap-1 rounded-lg border border-[var(--contrast-one)] bg-[var(--dark-one)] p-1 md:flex">
+        <div className="hidden items-center gap-1 rounded-lg border border-[var(--contrast-one)] bg-[var(--dark-one)] p-1 lg:flex">
           {navItems.map((item) => (
             <NavLink
               key={item.path}

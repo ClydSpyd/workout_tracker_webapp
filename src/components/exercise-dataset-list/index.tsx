@@ -5,6 +5,8 @@ import { useExerciseDataset } from '../../queries/exercises';
 
 interface Props {
   onSelect(exercise: ExerciseMinimal): void;
+  /** Label for the per-row action button. Defaults to "Add". */
+  selectLabel?: string;
   filterInput?: {
     name?: string;
     primaryMuscleGroup?: PrimaryMuscleGroup;
@@ -131,7 +133,7 @@ export default function ExerciseDatasetList(props: Props) {
               onClick={() => props.onSelect(exercise)}
               className="anton shrink-0 rounded-lg border border-[var(--contrast-one)] bg-[var(--dark-two)] px-6 py-3 text-lg font-extrabold uppercase tracking-wide text-white transition-colors hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
             >
-              Add
+              {props.selectLabel ?? 'Add'}
             </button>
           </div>
         ))}

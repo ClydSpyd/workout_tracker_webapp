@@ -130,6 +130,26 @@ export const useRemoveExerciseFromWorkout = () =>
     }),
   });
 
+export const useReplaceExercise = () =>
+  useCurrentWorkoutMutation<{
+    fromExerciseId: string;
+    toExerciseId: string;
+    toName?: string; // optional, for an instant label swap
+  }>({
+    request: (workoutId, { fromExerciseId, toExerciseId }) =>
+      API.workout.replaceExercise(workoutId, fromExerciseId, toExerciseId),
+    optimisticUpdate: (currentWorkout, { fromExerciseId, toExerciseId, toName }) =>
+      mapExercise(currentWorkout, fromExerciseId, (exercise) => ({
+        ...exercise,
+        exerciseId: toExerciseId,
+        name: toName ?? exercise.name,
+        // Muscle groups etc. come from server enrichment; drop the previous
+        // exercise's details so its chips don't linger on the swapped card.
+        exerciseDetails: undefined,
+        // sets are intentionally preserved
+      })),
+  });
+
 export const useToggleSetCompleted = () =>
   useCurrentWorkoutMutation<{
     exerciseId: string;

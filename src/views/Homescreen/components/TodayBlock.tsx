@@ -19,7 +19,7 @@ export default function TodayBlock() {
 
   return (
     <section
-      className={`h-[185px] flex flex-col md:flex-row gap-4 items-center justify-between text-white  module-wrapper ${activeWorkout ? 'border-[var(--accent-primary)]! bg-grad' : ''}`}
+      className={`h-[185px] flex flex-col lg:flex-row gap-4 items-center justify-between text-white  module-wrapper ${activeWorkout ? 'border-[var(--accent-primary)]! bg-grad' : ''}`}
     >
       <div className="flex flex-col gap-2 opacity-80">
         <div className="text-xs flex gap-2 items-center">
@@ -60,7 +60,7 @@ export default function TodayBlock() {
         text={activeWorkout ? 'Start Workout' : 'Start a Session'}
         onClick={handleStartWorkout}
         size="xl"
-        additionalClasses={'w-full md:w-auto mt-4 md:mt-0'}
+        additionalClasses={'w-full lg:w-auto mt-4 lg:mt-0'}
       />
     </section>
   );

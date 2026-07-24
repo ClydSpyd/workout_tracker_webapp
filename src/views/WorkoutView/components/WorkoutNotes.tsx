@@ -9,7 +9,7 @@ export default function WorkoutNotes() {
       <p className="text-white/80 font-bold text-xs mb-2">NOTES</p>
       <textarea
         placeholder="Add notes about this workout..."
-        className="w-full h-[100px] bg-[var(--dark-two)] border-2 border-[var(--contrast-one)] rounded-md p-2 text-white resize-none"
+        className="w-full h-[100px] bg-[var(--dark-two)] border-2 border-[var(--contrast-one)] rounded-md text-white resize-none  p-2!"
       />
     </div>
   );
