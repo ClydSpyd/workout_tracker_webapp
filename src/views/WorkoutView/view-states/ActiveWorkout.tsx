@@ -8,6 +8,7 @@ import WorkoutSummary from '../components/WorkoutSummary';
 import WorkoutProgress from '../components/WorkoutProgress';
 import AddExerciseModal from '../components/AddExerciseModal';
 import ExerciseList from '../components/ExerciseList';
+import RestTimer from '../../../components/ui/RestTimer';
 
 export default function ActiveWorkout() {
   const { data: workout } = useMyCurrentWorkout();
@@ -52,7 +53,12 @@ export default function ActiveWorkout() {
         </div>
         <div className="flex flex-col gap-4 h-full">
           <WorkoutProgress session={workout} />
-          <WorkoutNotes />
+          <WorkoutNotes
+            key={workout._id}
+            notes={workout.notes}
+            onSave={(notes) => updateWorkout({ notes })}
+          />
+          <RestTimer display />
         </div>
       </div>
 

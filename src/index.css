@@ -47,6 +47,36 @@
   animation: modal-slide-up 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Mobile nav sheet: slides in from the right edge. */
+@keyframes sheet-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-sheet-panel {
+  animation: sheet-slide-in-right 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Toasts: rise into place from below. */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* replace browser default focus ring on inputs with a simple orange border. */
 input:focus,
 input:focus-visible,
@@ -124,6 +154,11 @@ p {
   letter-spacing: 0;
 }
 
+.manrope {
+  font-family: 'Manrope', sans-serif;
+  letter-spacing: 0.025em;
+}
+
 .space-mono {
   font-family: 'Space Mono', monospace;
   letter-spacing: 2px;
@@ -185,6 +220,15 @@ button {
     var(--grid-size) var(--grid-size);
 }
 
+/* Scrollable strip without a visible scrollbar (mobile filter chips, etc.) */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 .module-wrapper {
   @apply rounded-xl border py-8 px-10;
   border-color: var(--contrast-one);
@@ -200,4 +244,5 @@ button {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  padding-bottom: 40px;
 }

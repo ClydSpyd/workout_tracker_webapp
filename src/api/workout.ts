@@ -1,6 +1,12 @@
 import { baseClient } from '.';
 
 export const workoutMethods = {
+  getWorkoutById: async (workoutId: string) => {
+    const { data } = await baseClient.get<WorkoutSession>(
+      `/workout/${workoutId}`,
+    );
+    return data;
+  },
   getMyActiveWorkout: async () => {
     const { data } = await baseClient.get<WorkoutSession | null>(
       '/workout/active',
@@ -21,6 +27,24 @@ export const workoutMethods = {
     const { data } = await baseClient.patch<WorkoutSession>(
       `/workout/${workoutId}`,
       updatedData,
+    );
+    return data;
+  },
+  startWorkout: async (workoutId: string) => {
+    const { data } = await baseClient.patch<WorkoutSession>(
+      `/workout/${workoutId}`,
+      {
+        started: new Date().toISOString(),
+      },
+    );
+    return data;
+  },
+  endWorkout: async (workoutId: string) => {
+    const { data } = await baseClient.patch<WorkoutSession>(
+      `/workout/${workoutId}`,
+      {
+        ended: new Date().toISOString(),
+      },
     );
     return data;
   },

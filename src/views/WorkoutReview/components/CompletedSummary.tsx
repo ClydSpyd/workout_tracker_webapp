@@ -1,44 +1,62 @@
-import { useState } from 'react';
-import { FaRegCalendar, FaRegClock, FaStop } from 'react-icons/fa';
+import { FaRegCalendar, FaRegClock } from 'react-icons/fa';
 import { format } from 'date-fns';
-import WorkoutTitleBlock from './WorkoutTitleBlock';
-import Button from '../../../components/ui/Button';
-import ElapsedTimer from '../../../components/ui/ElapsedTimer';
-import EndWorkoutModal from './EndWorkoutModal';
+import { formatElapsed } from '../../../hooks/useElapsedTime';
 import { useWorkoutSessionData } from '../../../hooks/useWorkoutSessionData';
 
-export default function WorkoutSummary({
+/**
+ * Static header for a finished session — the read-only counterpart to
+ * WorkoutSummary. No live indicator, no editable title, no End Workout action.
+ */
+export default function CompletedSummary({
   session,
 }: {
-  session?: WorkoutSession | null;
+  session: WorkoutSession;
 }) {
-  const { exerciseCount, setCount, estimatedDurationSec } =
-    useWorkoutSessionData(session ?? null);
-  const [confirmingEnd, setConfirmingEnd] = useState(false);
+  const { exerciseCount, setCount } = useWorkoutSessionData(session);
+
+  const startedAt = session.started ?? session.createdAt;
+  const endedAt = session.ended;
+
+  // Final duration, frozen — both ends are known, so nothing ticks here.
+  const durationSeconds =
+    startedAt && endedAt
+      ? Math.max(
+          0,
+          Math.floor(
+            (new Date(endedAt).getTime() - new Date(startedAt).getTime()) / 1000,
+          ),
+        )
+      : null;
+
+  const dateLabel = format(
+    new Date(endedAt ?? startedAt ?? Date.now()),
+    'dd MMM yyyy',
+  ).toUpperCase();
+
   return (
     <div className="w-full flex flex-col lg:flex-row justify-between gap-4 h-full min-h-0 mb-4">
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <span
-            className="inline-block w-[10px] h-[10px] rounded-full bg-[var(--accent-primary)] animate-pulse"
-            aria-label="Live indicator"
+            className="inline-block w-[10px] h-[10px] rounded-full bg-[var(--contrast-two)]"
+            aria-hidden="true"
           />
-          <p className="anotation">Live session</p>
+          <p className="anotation">Completed session</p>
         </div>
-        <WorkoutTitleBlock />
-        <div className="hidden lg:flex gap-2">
+
+        <h1 className="heading-one text-white">{session.name}</h1>
+
+        <div className="hidden lg:flex gap-2 mt-2">
           <div className="flex items-center px-4 py-2 rounded-md bg-[var(--dark-one)] text-[var(--contrast-three)] border border-[var(--contrast-one)]">
             <FaRegClock className="text-sm relative bottom-[1px] mr-2" />
             <p className="text-xs! font-[700] text-[var(--contrast-three)]!">
-              {estimatedDurationSec
-                ? `~${Math.ceil(estimatedDurationSec / 60)} min`
-                : '-'}
+              {durationSeconds === null ? '-' : formatElapsed(durationSeconds)}
             </p>
           </div>
           <div className="flex items-center px-4 py-2 rounded-md bg-[var(--dark-one)] text-[var(--contrast-three)] border border-[var(--contrast-one)]">
             <FaRegCalendar className="text-sm relative bottom-[1px] mr-2" />
             <p className="text-xs! font-[700] text-[var(--contrast-three)]!">
-              {format(new Date(), 'dd MMM yyyy').toUpperCase()}
+              {dateLabel}
             </p>
           </div>
           <div className="flex items-center px-4 py-2 rounded-md bg-[var(--dark-one)] text-[var(--contrast-three)] border border-[var(--contrast-one)]">
@@ -54,26 +72,15 @@ export default function WorkoutSummary({
           </div>
         </div>
       </div>
-      <div className="h-full justify-center hidden lg:flex flex-col items-end w-40">
-        <ElapsedTimer
-          from={session?.started ?? session?.createdAt}
-          until={session?.ended}
-        />
-        <Button
-          icon={<FaStop />}
-          text="End Workout"
-          size="xl"
-          onClick={() => setConfirmingEnd(true)}
-          disabled={!session}
-        />
-      </div>
 
-      {confirmingEnd && session && (
-        <EndWorkoutModal
-          session={session}
-          onClose={() => setConfirmingEnd(false)}
-        />
-      )}
+      <div className="h-full justify-center hidden lg:flex flex-col items-end w-40">
+        <p className="text-[var(--contrast-three)]! text-xs! font-[700] pr-1">
+          DURATION
+        </p>
+        <div className="anotation text-7xl! font-bold text-white/80! mb-2 tabular-nums whitespace-nowrap">
+          {durationSeconds === null ? '--:--' : formatElapsed(durationSeconds)}
+        </div>
+      </div>
     </div>
   );
 }

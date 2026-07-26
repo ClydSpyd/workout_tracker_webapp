@@ -1,31 +1,31 @@
-import { GiWeightLiftingUp } from 'react-icons/gi';
+// import { GiWeightLiftingUp } from 'react-icons/gi';
 import { HiBolt } from 'react-icons/hi2';
 import { IoListSharp } from 'react-icons/io5';
 import { LuChartNoAxesCombined } from 'react-icons/lu';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 
 interface NavItemData {
   label: string;
   href: string;
   icon: React.ReactNode;
 }
-const mainNavItems: NavItemData[] = [
-  {
-    label: 'Dashboard',
-    href: '/',
-    icon: <LuChartNoAxesCombined fontSize={20} />,
-  },
-  {
-    label: 'Current Workout',
-    href: '/current-workout',
-    icon: <HiBolt fontSize={20} />,
-  },
-  {
-    label: 'Workouts',
-    href: '/workouts',
-    icon: <IoListSharp fontSize={20} />,
-  },
-];
+// const mainNavItems: NavItemData[] = [
+//   {
+//     label: 'Dashboard',
+//     href: '/',
+//     icon: <LuChartNoAxesCombined fontSize={20} />,
+//   },
+//   {
+//     label: 'Current Workout',
+//     href: '/workout',
+//     icon: <HiBolt fontSize={20} />,
+//   },
+//   {
+//     label: 'Workouts',
+//     href: '/workouts',
+//     icon: <IoListSharp fontSize={20} />,
+//   },
+// ];
 
 export default function Sidebar() {
   return (

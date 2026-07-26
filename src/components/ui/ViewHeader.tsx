@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { FiUser, FiLogOut } from 'react-icons/fi';
+import { FiUser, FiLogOut, FiMenu } from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import BarsLogo from './BarsLogo';
+import MobileNavSheet from './MobileNavSheet';
 import { navItems } from '../../config/nav';
 
 export default function ViewHeader() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close the popover on outside click or Escape.
@@ -34,6 +36,7 @@ export default function ViewHeader() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     setMenuOpen(false);
+    setSheetOpen(false);
     navigate('/login', { replace: true });
   };
 
@@ -53,7 +56,7 @@ export default function ViewHeader() {
       </div>
 
       <nav className="flex-1 flex justify-center">
-        <div className="hidden items-center gap-1 rounded-lg border border-[var(--contrast-one)] bg-[var(--dark-one)] p-1 lg:flex">
+        <div className="hidden items-center gap-1 rounded-lg border border-[var(--contrast-one)] bg-[var(--dark-one)] p-1 md:flex">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -74,7 +77,19 @@ export default function ViewHeader() {
       </nav>
 
       <div className="w-30 flex justify-end">
-        <div className="relative" ref={menuRef}>
+        {/* Mobile: hamburger opens the full-screen nav sheet */}
+        <button
+          type="button"
+          aria-label="Open menu"
+          aria-expanded={sheetOpen}
+          onClick={() => setSheetOpen(true)}
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--contrast-one)] bg-[var(--dark-one)] text-[var(--accent-primary)] transition-colors hover:border-[var(--accent-primary)] md:hidden"
+        >
+          <FiMenu className="text-xl" />
+        </button>
+
+        {/* Desktop: account dropdown */}
+        <div className="relative hidden md:block" ref={menuRef}>
           <button
             type="button"
             aria-label="Account menu"
@@ -113,6 +128,13 @@ export default function ViewHeader() {
           )}
         </div>
       </div>
+
+      {sheetOpen && (
+        <MobileNavSheet
+          onClose={() => setSheetOpen(false)}
+          onLogout={handleLogout}
+        />
+      )}
     </div>
   );
 }

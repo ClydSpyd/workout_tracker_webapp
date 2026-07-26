@@ -58,10 +58,11 @@ export type PrimaryMuscleGroup = (typeof primaryMuscleGroups)[number];
 
 // General tags for labeling a workout (e.g. by split or body region)
 export const tags = [
-  'push-day',
-  'pull-day',
+  'push',
+  'pull',
   'legs',
   'upper-body',
+  'lower-body',
   'full-body',
   'chest',
   'back',
@@ -119,6 +120,154 @@ export const equipment = [
 ];
 
 export type Equipment = (typeof equipment)[number];
+
+/**
+ * Coarse equipment buckets offered as filters. Each `match` is tested as a
+ * substring against the dataset's own equipment values, so "cable" catches
+ * "cable-machine" and "dumbbell" catches "dumbbells".
+ */
+export const equipmentFilters = [
+  { label: 'Barbell', match: ['barbell', 'ez-bar', 't-bar', 'trap-bar'] },
+  { label: 'Dumbbell', match: ['dumbbell', 'kettlebell'] },
+  { label: 'Cable', match: ['cable', 'rope', 'lat-pulldown'] },
+  { label: 'Machine', match: ['machine', 'smith', 'sled'] },
+  {
+    label: 'Bodyweight',
+    match: ['bodyweight', 'pull-up-bar', 'dip-bars', 'rings', 'mat', 'wall'],
+  },
+] as const;
+
+export type EquipmentFilter = (typeof equipmentFilters)[number]['label'];
+
+/**
+ * Canonical expansion of each consolidated group into the specific muscle
+ * values the exercise dataset actually uses.
+ *
+ * This is the single source of truth for muscle matching: picking "Back" must
+ * also surface exercises tagged `upper-back`, `lower-back`, `lats`, `traps`,
+ * and so on — the dataset never tags anything as plain `back`.
+ */
+export const muscleGroupAliases: Record<PrimaryMuscleGroup, string[]> = {
+  chest: ['chest', 'upper-chest', 'lower-chest'],
+  back: [
+    'back',
+    'lats',
+    'upper-back',
+    'middle-back',
+    'lower-back',
+    'traps',
+    'upper-traps',
+    'teres-major',
+    'rotator-cuff',
+  ],
+  shoulders: [
+    'shoulders',
+    'front-delts',
+    'side-delts',
+    'rear-delts',
+    'rotator-cuff',
+  ],
+  biceps: ['biceps', 'brachialis'],
+  triceps: ['triceps'],
+  forearms: ['forearms'],
+  glutes: ['glutes', 'glute-medius'],
+  quadriceps: ['quadriceps', 'quads'],
+  hamstrings: ['hamstrings'],
+  calves: ['calves'],
+  core: ['core', 'abs', 'obliques'],
+  'full-body': ['full-body'],
+  'upper-body': [
+    'chest',
+    'upper-chest',
+    'lower-chest',
+    'back',
+    'lats',
+    'upper-back',
+    'middle-back',
+    'lower-back',
+    'traps',
+    'upper-traps',
+    'teres-major',
+    'rotator-cuff',
+    'shoulders',
+    'front-delts',
+    'side-delts',
+    'rear-delts',
+    'biceps',
+    'brachialis',
+    'triceps',
+    'forearms',
+  ],
+  'lower-body': [
+    'glutes',
+    'glute-medius',
+    'quadriceps',
+    'quads',
+    'hamstrings',
+    'calves',
+    'adductors',
+    'abductors',
+    'hip-flexors',
+  ],
+};
+
+/** Every dataset muscle value a consolidated group should match. */
+export function expandMuscleGroup(group: string): string[] {
+  const key = group.trim().toLowerCase();
+  return muscleGroupAliases[key] ?? [key];
+}
+
+/**
+ * Does an exercise belong to a consolidated group? Checks its muscle groups
+ * against the group's aliases, falling back to `bodyRegion` for the
+ * whole-region groups (upper-body / lower-body / full-body).
+ */
+export function matchesMuscleGroup(
+  exercise: { muscleGroups?: string[]; bodyRegion?: string | boolean },
+  group: string,
+): boolean {
+  const aliases = new Set(expandMuscleGroup(group));
+  const hasMuscle = (exercise.muscleGroups ?? []).some((muscle) =>
+    aliases.has(muscle.trim().toLowerCase()),
+  );
+  const matchesRegion =
+    String(exercise.bodyRegion ?? '').toLowerCase() ===
+    group.trim().toLowerCase();
+
+  return hasMuscle || matchesRegion;
+}
+
+/**
+ * Broad coverage buckets shown as pills. Derived from the alias map above so
+ * the pills and the filters can never disagree about what counts as "Back".
+ */
+export const coverageGroups: { label: string; match: string[] }[] = [
+  { label: 'Chest', match: muscleGroupAliases.chest },
+  { label: 'Back', match: muscleGroupAliases.back },
+  { label: 'Shoulders', match: muscleGroupAliases.shoulders },
+  {
+    label: 'Arms',
+    match: [
+      ...muscleGroupAliases.biceps,
+      ...muscleGroupAliases.triceps,
+      ...muscleGroupAliases.forearms,
+    ],
+  },
+  { label: 'Legs', match: muscleGroupAliases['lower-body'] },
+  { label: 'Core', match: muscleGroupAliases.core },
+];
+
+/** Split labels offered when tagging a routine. Single-select. */
+export const routineTags = [
+  'push',
+  'pull',
+  'legs',
+  'core',
+  'upper',
+  'full-body',
+] as const;
+
+export type RoutineTag = (typeof routineTags)[number];
 
 export const movementPattern = [
   'anti-extension',

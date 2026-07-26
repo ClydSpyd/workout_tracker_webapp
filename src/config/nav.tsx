@@ -5,6 +5,7 @@ import { IoCalendarClearOutline, IoListSharp } from 'react-icons/io5';
 import Homescreen from '../views/Homescreen';
 import PlaceholderView from '../views/PlaceholderView';
 import WorkoutView from '../views/WorkoutView';
+import RoutinesView from '../views/RoutinesView';
 
 export interface NavItem {
   /** Absolute path; also the router path for this destination. */
@@ -30,8 +31,8 @@ export const navItems: NavItem[] = [
     element: <Homescreen />,
   },
   {
-    path: '/current-workout',
-    label: 'Current Workout',
+    path: '/workout',
+    label: 'Workout',
     icon: <HiBolt fontSize={18} />,
     element: <WorkoutView />,
   },
@@ -42,9 +43,9 @@ export const navItems: NavItem[] = [
     element: <PlaceholderView title="Sessions" />,
   },
   {
-    path: '/workouts',
-    label: 'Workouts',
+    path: '/routines',
+    label: 'Routines',
     icon: <IoListSharp fontSize={18} />,
-    element: <PlaceholderView title="Workouts" />,
+    element: <RoutinesView />,
   },
 ];

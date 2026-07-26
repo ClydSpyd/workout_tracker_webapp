@@ -68,7 +68,11 @@ function useCurrentWorkoutMutation<Variables>(config: {
         return { previousWorkout }; // stashed for rollback
       }),
 
-    onError: (_error, _variables, context: any) => {
+    onError: (
+      _error,
+      _variables,
+      context?: { previousWorkout?: WorkoutSession | null },
+    ) => {
       if (context?.previousWorkout !== undefined) {
         queryClient.setQueryData(CURRENT_WORKOUT_KEY, context.previousWorkout);
       }
@@ -88,6 +92,87 @@ export const useUpdateCurrentWorkout = () =>
       ...updatedData,
     }),
   });
+
+/**
+ * Start a live session from a saved routine. The API copies the routine's
+ * exercises across (with every set reset to incomplete) and stamps the
+ * routine's `lastPerformed`.
+ *
+ * Rejected with 409 when a session is already in progress.
+ */
+export const useStartWorkoutFromRoutine = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (routine: Routine) =>
+      API.workout.createWorkout({
+        name: routine.name,
+        baseRoutine: routine._id,
+        tags: routine.tags ?? [],
+      }),
+    onSuccess: async () => {
+      // The create response isn't enriched (no exercise names or muscle
+      // groups), so pull the full session from /workout/active instead of
+      // seeding the cache with it. Awaited so callers can navigate straight to
+      // the workout view without it flashing the "no active session" state.
+      await queryClient.refetchQueries({ queryKey: CURRENT_WORKOUT_KEY });
+
+      queryClient.invalidateQueries({ queryKey: ['myWorkouts'] });
+      // lastPerformed just changed on the routine.
+      queryClient.invalidateQueries({ queryKey: ['myRoutines'] });
+    },
+  });
+};
+
+/**
+ * Update an arbitrary workout by id — for editing a past session (e.g. its
+ * notes) where the workout is not the user's *current* one, so the
+ * current-workout cache must not be touched.
+ */
+export const useUpdateWorkout = (workoutId?: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (updatedData: Partial<WorkoutSession>) => {
+      if (!workoutId) throw new Error('No workout id');
+      return API.workout.updateWorkout(workoutId, updatedData);
+    },
+    onSuccess: (updatedWorkout) => {
+      queryClient.setQueryData(['workout', workoutId], updatedWorkout);
+      queryClient.invalidateQueries({ queryKey: ['myWorkouts'] });
+    },
+  });
+};
+
+/**
+ * End the active session. Deliberately not built on useCurrentWorkoutMutation:
+ * once ended, the workout is no longer the *current* one, so the response must
+ * not be written back into the current-workout cache.
+ */
+export const useEndWorkout = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => {
+      const currentWorkout = queryClient.getQueryData<WorkoutSession | null>(
+        CURRENT_WORKOUT_KEY,
+      );
+      if (!currentWorkout) throw new Error('No active workout');
+      return API.workout.endWorkout(currentWorkout._id);
+    },
+
+    onSuccess: (endedWorkout) => {
+      // There is no ongoing session any more — /workout/active would now
+      // return null, so reflect that immediately.
+      queryClient.setQueryData(CURRENT_WORKOUT_KEY, null);
+      // Seed the finished workout's own entry so its page renders without a
+      // fetch when we redirect to it.
+      queryClient.setQueryData(['workout', endedWorkout._id], endedWorkout);
+      // It now belongs in the user's history.
+      queryClient.invalidateQueries({ queryKey: ['myWorkouts'] });
+    },
+  });
+};
 
 export const useAddExerciseToCurrentWorkout = () =>
   useCurrentWorkoutMutation<{ exerciseId: string }>({

@@ -6,10 +6,20 @@ import useOutsideClick from '../../hooks/useOutsideClick';
 interface ModalProps {
   /** Large title, e.g. "BUILD YOUR SESSION". */
   mainHeading: string;
-  /** Small eyebrow label above the title, e.g. "ADD EXERCISE". */
-  subHeading: string;
+  /** Small eyebrow above the title — a string, or richer markup (tags, etc.). */
+  subHeading: ReactNode;
   /** Optional supporting line under the title. */
-  description?: string;
+  description?: ReactNode;
+  /** Optional actions pinned below the scrolling content. */
+  footer?: ReactNode;
+  /** `wide` suits two-column content such as the routine builder. */
+  size?: 'default' | 'wide';
+  /**
+   * Optional layer covering the whole panel (confirmation steps, etc.).
+   * Lives inside the panel so it doesn't trip the outside-click dismissal a
+   * separately-portaled modal would.
+   */
+  overlay?: ReactNode;
   /** Called once when the modal mounts. */
   onOpen?: () => void;
   /** Called when the user dismisses the modal (backdrop, Escape, or close button). */
@@ -26,6 +36,9 @@ export default function Modal({
   mainHeading,
   subHeading,
   description,
+  footer,
+  overlay,
+  size = 'default',
   onOpen,
   onClose,
   children,
@@ -63,10 +76,12 @@ export default function Modal({
     >
       <div
         ref={panelRef}
-        className="animate-modal-panel flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-[var(--contrast-one)] bg-[var(--dark-two)] text-white shadow-2xl"
+        className={`animate-modal-panel relative flex max-h-[90vh] w-full flex-col ${size === 'wide' ? 'max-w-6xl' : 'max-w-3xl'} overflow-hidden rounded-2xl border border-[var(--contrast-one)] bg-[var(--dark-two)] text-white shadow-2xl`}
       >
+        {overlay}
+
         {/* Header */}
-        <div className="relative border-b border-[var(--contrast-one)] px-8 py-6">
+        <div className="relative border-b border-[var(--contrast-one)] px-8 py-6 min-h-25">
           <button
             type="button"
             aria-label="Close"
@@ -76,9 +91,10 @@ export default function Modal({
             <FiX className="text-xl" />
           </button>
 
-          <p className="space-mono text-xs uppercase tracking-wide text-[var(--accent-primary)]">
+          {/* A div, not a p — subHeading may carry markup (tags, chips). */}
+          <div className="space-mono pr-12 text-xs uppercase tracking-wide text-[var(--accent-primary)]">
             {subHeading}
-          </p>
+          </div>
           <h2 className="mt-1 heading-three pr-12">{mainHeading}</h2>
           {description && (
             <p className="mt-2 body-text text-sm! text-[var(--contrast-three)]">
@@ -88,7 +104,16 @@ export default function Modal({
         </div>
 
         {/* Case-by-case content */}
-        <div className="flex-1 overflow-y-auto px-8 py-6">{children}</div>
+        <div className="flex-1 overflow-y-auto px-4 py-5 lg:px-8 lg:py-6">
+          {children}
+        </div>
+
+        {/* Optional pinned actions */}
+        {footer && (
+          <div className="border-t border-[var(--contrast-one)] px-4 py-4 lg:px-8 lg:py-5">
+            {footer}
+          </div>
+        )}
       </div>
     </div>,
     document.body,

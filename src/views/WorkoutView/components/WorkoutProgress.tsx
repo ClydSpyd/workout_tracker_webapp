@@ -1,46 +1,7 @@
 import { useMemo } from 'react';
 import { FiInfo } from 'react-icons/fi';
 import { useWorkoutSessionData } from '../../../hooks/useWorkoutSessionData';
-
-// Broad coverage buckets shown as pills, each matched against the raw muscle
-// groups on a session's exercises.
-const COVERAGE_GROUPS: { label: string; match: string[] }[] = [
-  { label: 'Chest', match: ['chest', 'upper-chest', 'lower-chest'] },
-  {
-    label: 'Back',
-    match: [
-      'back',
-      'lats',
-      'upper-back',
-      'middle-back',
-      'lower-back',
-      'traps',
-      'upper-traps',
-      'teres-major',
-      'rotator-cuff',
-    ],
-  },
-  {
-    label: 'Shoulders',
-    match: ['shoulders', 'front-delts', 'side-delts', 'rear-delts'],
-  },
-  { label: 'Arms', match: ['biceps', 'triceps', 'forearms', 'brachialis'] },
-  {
-    label: 'Legs',
-    match: [
-      'quadriceps',
-      'quads',
-      'hamstrings',
-      'glutes',
-      'glute-medius',
-      'calves',
-      'adductors',
-      'abductors',
-      'hip-flexors',
-    ],
-  },
-  { label: 'Core', match: ['core', 'abs', 'obliques'] },
-];
+import { coverageGroups } from '../../../config/muscles';
 
 interface WorkoutProgressProps {
   session: WorkoutSession;
@@ -71,7 +32,7 @@ export default function WorkoutProgress({ session }: WorkoutProgressProps) {
       }
     }
     return new Set(
-      COVERAGE_GROUPS.filter((group) =>
+      coverageGroups.filter((group) =>
         group.match.some((m) => hit.has(m)),
       ).map((group) => group.label),
     );
@@ -121,7 +82,7 @@ export default function WorkoutProgress({ session }: WorkoutProgressProps) {
         )}
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {COVERAGE_GROUPS.map((group) => {
+          {coverageGroups.map((group) => {
             const active = activeGroups.has(group.label);
             return (
               <span

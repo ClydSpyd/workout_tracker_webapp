@@ -293,7 +293,7 @@ export default function ExerciseCard({
         <button
           type="button"
           onClick={addSet}
-          className="space-mono flex items-center gap-2 self-start rounded-lg border border-dashed border-[var(--contrast-one)] px-5 py-3 text-sm font-bold uppercase tracking-wide text-[var(--accent-primary)] transition-colors hover:border-[var(--accent-primary)]"
+          className="space-mono flex items-center justify-center gap-2 self-start rounded-lg border border-dashed border-[var(--contrast-one)] px-5 py-3 text-sm font-bold uppercase tracking-wide text-[var(--accent-primary)] transition-colors hover:border-[var(--accent-primary)] w-full lg:w-fit"
         >
           <FiPlus /> Add Set
         </button>

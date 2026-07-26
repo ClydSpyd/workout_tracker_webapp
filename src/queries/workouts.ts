@@ -32,29 +32,11 @@ export const useMyWorkouts = () => {
   });
 };
 
-export const useWorkout = (workoutId: string) => {
+/** Fetch a single workout by its ID — used to review a completed session. */
+export const useWorkout = (workoutId?: string) => {
   return useQuery<WorkoutSession, Error>({
     queryKey: ['workout', workoutId],
-    queryFn: async () => {
-      try {
-        const res: AxiosResponse<WorkoutSession> = await baseClient.get(
-          `/workout/${workoutId}`,
-        );
-        console.log('Fetched workout:', res.data);
-        return res.data;
-      } catch (error) {
-        console.log('Error in useWorkout query function:', error);
-        const axiosError = error as AxiosError<{ error: string }>;
-
-        console.error('Error fetching workout:', {
-          status: axiosError.response?.status,
-          message: axiosError.response?.data?.error || axiosError.message,
-          error,
-        });
-
-        throw new Error(axiosError.response?.data?.error || axiosError.message);
-      }
-    },
+    queryFn: () => API.workout.getWorkoutById(workoutId!),
     retry: 1,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,

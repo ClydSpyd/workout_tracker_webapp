@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaPlay, FaPlus } from 'react-icons/fa';
-import { primaryMuscleGroups } from '../../../config/muscles';
+import { primaryMuscleGroups, tags } from '../../../config/muscles';
 import Button from '../../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../../api';
@@ -14,10 +14,10 @@ export default function CreateWorkout() {
   const { refetch } = useMyCurrentWorkout();
 
   const handleLoadRoutine = () => {
-    navigate('/current-workout?loadRoutine=true');
+    navigate('/workout?loadRoutine=true');
   };
 
-  const hanleCreateWorkout = async () => {
+  const handleCreateWorkout = async () => {
     setIsSubmitting(true);
     try {
       await API.workout.createWorkout({
@@ -25,7 +25,7 @@ export default function CreateWorkout() {
         tags: selectedMuscles,
       });
       await refetch(); // Refetch the current workout after creating a new one
-      navigate('/current-workout');
+      navigate('/workout');
     } catch (error) {
       console.error('Error creating workout:', error);
     } finally {
@@ -64,27 +64,27 @@ export default function CreateWorkout() {
         </div>
         <div className="w-full">
           <p className="block mb-4 text-xs! anotation text-[var(--contrast-three)]! tracking-wider">
-            Target muscles{' '}
+            Tag workout{' '}
           </p>
           <div className="w-full flex justify-center gap-1 gap-y-2 flex-wrap">
-            {primaryMuscleGroups.map((muscle) => (
+            {tags.map((tag) => (
               <button
-                key={muscle}
+                key={tag}
                 type="button"
                 onClick={() => {
                   setSelectedMuscles((prev) =>
-                    prev.includes(muscle)
-                      ? prev.filter((m) => m !== muscle)
-                      : [...prev, muscle],
+                    prev.includes(tag)
+                      ? prev.filter((m) => m !== tag)
+                      : [...prev, tag],
                   );
                 }}
                 className={`px-4 py-2 rounded-full border anotation capitalize! text-sm! ${
-                  selectedMuscles.includes(muscle)
+                  selectedMuscles.includes(tag)
                     ? 'border-[var(--accent-primary)] bg-[var(--hint-primary-dark)] text-[var(--accent-primary)]!'
                     : 'bg-[var(--dark-two)] hover:brightness-85  text-[var(--contrast-three)]! border-[var(--contrast-one)]! hover:border-[var(--hint-primary-light)]!'
-                }`}
+                } ${selectedMuscles.length > 0 && !selectedMuscles.includes(tag) ? 'opacity-50 pointer-events-none' : ''}`}
               >
-                {muscle}
+                {tag}
               </button>
             ))}
           </div>
@@ -93,7 +93,7 @@ export default function CreateWorkout() {
           text="Create Workout"
           size="xl"
           additionalClasses="w-full"
-          onClick={hanleCreateWorkout}
+          onClick={handleCreateWorkout}
           disabled={isSubmitting || !workoutName}
           icon={<FaPlay className="text-xl" />}
         />

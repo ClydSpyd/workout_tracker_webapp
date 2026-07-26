@@ -1,6 +1,7 @@
 import axios, { type AxiosError } from 'axios';
-import { workoutMethods } from './workouts';
+import { workoutMethods } from './workout';
 import exerciseMethods from './exercises';
+import { routineMethods } from './routine';
 
 export const baseClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -35,4 +36,5 @@ baseClient.interceptors.response.use(
 export const API = {
   workout: workoutMethods,
   exercise: exerciseMethods,
+  routine: routineMethods,
 };

@@ -26,6 +26,27 @@ const SECONDS_PER_REP = 3; // tempo of a single rep
 const REST_BETWEEN_SETS_SEC = 90; // rest taken after each set
 const EXERCISE_TRANSITION_SEC = 120; // setup / equipment change per exercise
 
+/**
+ * Rough session length: time under load + rest between sets + transitions
+ * between exercises. Shared by sessions and routine templates so both quote
+ * the same number.
+ */
+export function estimateDurationSec({
+  totalReps,
+  setCount,
+  exerciseCount,
+}: {
+  totalReps: number;
+  setCount: number;
+  exerciseCount: number;
+}): number {
+  return (
+    totalReps * SECONDS_PER_REP +
+    setCount * REST_BETWEEN_SETS_SEC +
+    exerciseCount * EXERCISE_TRANSITION_SEC
+  );
+}
+
 const EMPTY_DATA: WorkoutSessionData = {
   exerciseCount: null,
   setCount: null,
@@ -69,11 +90,11 @@ export function useWorkoutSessionData(
 
     const exerciseCount = session.exercises.length;
 
-    // Estimate = time lifting + rest between sets + transitions between exercises.
-    const estimatedDurationSec =
-      totalReps * SECONDS_PER_REP +
-      setCount * REST_BETWEEN_SETS_SEC +
-      exerciseCount * EXERCISE_TRANSITION_SEC;
+    const estimatedDurationSec = estimateDurationSec({
+      totalReps,
+      setCount,
+      exerciseCount,
+    });
 
     return {
       exerciseCount,
