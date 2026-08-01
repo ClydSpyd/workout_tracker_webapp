@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaPlay, FaPlus } from 'react-icons/fa';
-import { primaryMuscleGroups, tags } from '../../../config/muscles';
+import { tags } from '../../../config/muscles';
 import Button from '../../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../../api';

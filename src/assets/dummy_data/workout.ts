@@ -109,6 +109,7 @@ export const workoutSessionSkeleton: WorkoutSession = {
   name: '',
   userId: '',
   exercises: [],
+  tags: [],
   started: null,
   ended: null,
   createdAt: new Date().toISOString(),
