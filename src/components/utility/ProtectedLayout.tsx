@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom';
 import ViewHeader from '../ui/ViewHeader';
-import Sidebar from '../ui/Sidebar';
 
 /**
  * Layout route for all authenticated pages. The auth guard lives on the route
@@ -12,7 +11,6 @@ const ProtectedLayout = () => {
     <div className="app-bg w-screen min-h-screen flex flex-col">
       <ViewHeader />
       <main className="container grow min-w-screen flex flex-1 overflow-hidden">
-        <Sidebar />
         <Outlet />
       </main>
     </div>
